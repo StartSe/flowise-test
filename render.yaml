@@ -1,0 +1,27 @@
+services:
+  - type: web
+    name: flowise-poc
+    runtime: image
+    plan: starter          # disk exige plano pago; sem disk, use `plan: free`
+    region: oregon
+    autoDeploy: false      # recomendado para serviços criados via botão
+    image:
+      url: docker.io/flowiseai/flowise:latest
+    healthCheckPath: /api/v1/ping
+    envVars:
+      - key: PORT
+        value: 3000
+      - key: DATABASE_PATH
+        value: /opt/flowise/.flowise
+      - key: SECRETKEY_PATH
+        value: /opt/flowise/.flowise
+      - key: LOG_PATH
+        value: /opt/flowise/.flowise/logs
+      - key: FLOWISE_USERNAME
+        value: admin
+      - key: FLOWISE_PASSWORD
+        generateValue: true   # o Render gera a senha e mostra no dashboard
+    disk:
+      name: flowise-data
+      mountPath: /opt/flowise/.flowise
+      sizeGB: 1
